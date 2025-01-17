@@ -1,19 +1,19 @@
-# Use an official Node.js runtime as a parent image
-FROM node:16
+# Use a smaller base image for production (Alpine-based Node.js image)
+FROM node:16-alpine
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy only the necessary files to avoid unnecessary context
 COPY package*.json ./
 
-# Install app dependencies, including Material-UI 5
-RUN npm install
+# Install app dependencies
+RUN npm install --production  # Install only production dependencies to reduce size
 
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the React app
+# Build the React app (assuming it needs to be built before running)
 RUN npm run build
 
 # Expose the port that the app will run on (adjust if needed)
